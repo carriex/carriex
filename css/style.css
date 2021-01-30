@@ -567,8 +567,8 @@ body.offcanvas {
     left: 0;
     width: 100%;
     right: 0;
-    background: rgba(0, 0, 0, 0.9);
-    opacity: 0;
+    background: rgba(0, 0, 0, 0);
+    opacity: 50;
     -webkit-transition: 0.3s;
     -o-transition: 0.3s;
     transition: 0.3s; }
