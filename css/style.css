@@ -90,7 +90,7 @@ figure {
   transition: 0.5s; }
   @media screen and (max-width: 1200px) {
     #colorlib-aside {
-      width: 30%; } }
+      width: 20%; } }
   @media screen and (max-width: 768px) {
     #colorlib-aside {
       width: 270px;
@@ -103,7 +103,7 @@ figure {
   #colorlib-aside #colorlib-logo {
     text-align: right;
     font-weight: 400;
-    font-size: 22px;
+    font-size: 15px;
     text-transform: uppercase;
     margin-bottom: 3em;
     display: block;
@@ -225,7 +225,7 @@ figure {
   transition: 0.5s; }
   @media screen and (max-width: 1200px) {
     #colorlib-main {
-      width: 70%; } }
+      width: 80%; } }
   @media screen and (max-width: 768px) {
     #colorlib-main {
       width: 100%; } }
@@ -398,7 +398,7 @@ body.offcanvas {
   font-size: 18px;
   margin-bottom: 4em;
   font-weight: 500;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   letter-spacing: 5px;
   line-height: 1.8; }
   .colorlib-heading span {
