@@ -38,6 +38,42 @@
 
 	<!-- Modernizr JS -->
 	<script src="../js/modernizr-2.6.2.min.js"></script>
+	<style>
+		.code,
+		code {
+			background: rgba(135, 131, 120, 0.15);
+			border-radius: 3px;
+			padding: 0.2em 0.4em;
+			border-radius: 3px;
+			font-size: 85%;
+			tab-size: 2;
+		}
+
+		code {
+			color: #eb5757;
+		}
+
+		.code {
+			padding: 1.5em 1em;
+		}
+
+		.code-wrap {
+			white-space: pre-wrap;
+			word-break: break-all;
+		}
+
+		.code > code {
+			background: none;
+			padding: 0;
+			font-size: 100%;
+			color: inherit;
+		}
+
+		.code {
+			font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+		}
+
+	</style>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
 	<script src="js/respond.min.js"></script>
@@ -48,7 +84,7 @@
 	<div id="colorlib-page">
 		<a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle"><i></i></a>
 				<aside id="colorlib-aside" role="complementary" class="border js-fullheight">
-			<h1 id="colorlib-logo"><a href="index.html"><span>Fangyuan</span><span>Xu</span></a></h1>
+			<h1 id="colorlib-logo"><a href="../index.html"><span>Fangyuan</span><span>Xu</span></a></h1>
 			<nav id="colorlib-main-menu" role="navigation">
 				<ul>
 					<li><a href="../index.html">Home</a></li>
@@ -77,13 +113,2397 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					<div class="row">
 						<div class="col-md-10 col-md-offset-3 col-md-pull-3">
 							<span class="heading-meta">Blog</span>
-							<span class="heading-section" style="font-size: 25px;">Situated Mapping of Sequential Instructions to Actions using Sequence to Sequence Model</span>
+							<span class="heading-section" style="font-size: 25px;">Situated Mapping of Sequential Instructions to Actions using Sequence to Sequence
+								Model </span>
 						</div>
 						<div class="col-md-10 col-md-offset-3 col-md-pull-3">
 							<div class=blog-entry>
 								<!--Insert HTML entries for blog content here -->
 
-			<p id="abe44f73-ee8d-4c71-91a8-801841197975" class="">To be updated</p>
+								<p id="6f64dff1-e806-4cd2-aa0d-f6132ee2a08a" class="">Last updated: <time>@Feb 21, 2021</time> </p>
+								<p id="39f9bf23-623f-4e5b-8f54-c997726536e0" class="">In this project, we built a sequence to sequence model
+									to map to actions for an agent in the ALCHEMY environment from the <a
+										href="https://nlp.stanford.edu/projects/scone/">SCONE dataset</a>. The code for the project can be
+									found at <a href="https://github.com/carriex/scone">https://github.com/carriex/scone</a>.</p>
+								<nav id="acb86603-2854-41c1-833a-f45ef78d233d" class="block-color-gray table_of_contents">
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#dea1693a-ed56-4833-bc29-38b8e4c151ae">Task</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#138aa9e4-4ef8-448f-bf5b-f72b5e682402">Data</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#253ae28c-7267-4574-beac-9e58d5a29ef9">Model</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#73bea0d3-9cc0-4154-b10b-7225029f9012">Training</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#b6cfea45-05b9-4c9d-801e-4ef3a7743d1a">Results </a></div>
+									<div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link"
+											href="#f491a8bd-b46f-429a-b01a-7eb581f344d8">Quantitative analysis </a></div>
+									<div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link"
+											href="#6991a8e8-9ea2-4dda-b990-eb5a2c1e1f2c">Qualitative analysis</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link"
+											href="#80253868-ac52-4a50-87c6-477b11aaea9b">Discussion</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link"
+											href="#5051e520-df78-438b-b5f1-db4a56aa8903">Resolving references to state and previous
+											instructions</a></div>
+									<div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link"
+											href="#57defbbc-a5e5-45ca-bebe-f6f1fc150343">Debiasing POP and PUSH action</a></div>
+								</nav>
+								<h2 id="dea1693a-ed56-4833-bc29-38b8e4c151ae" class=".blog-entry .desc h3">Task</h2>
+								<p id="cc33f7c0-4cfc-4b07-b4fd-00def48cad29" class="">Let <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>X</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">X </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.68333em;vertical-align:0em;"></span><span
+															class="mord mathdefault"
+															style="margin-right:0.07847em;">X</span></span></span></span></span><span>﻿</span></span>
+									be the whole training corpus and <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mover accent="true">
+																	<mi>x</mi>
+																	<mo>ˉ</mo>
+																</mover>
+																<mo>∈</mo>
+																<mi>X</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">\bar{x} \in X</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.60688em;vertical-align:-0.0391em;"></span><span
+															class="mord accent"><span class="vlist-t"><span class="vlist-r"><span
+																		class="vlist" style="height:0.56778em;"><span
+																			style="top:-3em;"><span class="pstrut"
+																				style="height:3em;"></span><span class="mord"><span
+																					class="mord mathdefault">x</span></span></span><span
+																			style="top:-3em;"><span class="pstrut"
+																				style="height:3em;"></span><span class="accent-body"
+																				style="left:-0.22222em;"><span
+																					class="mord">ˉ</span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">∈</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.68333em;vertical-align:0em;"></span><span
+															class="mord mathdefault"
+															style="margin-right:0.07847em;">X</span></span></span></span></span><span>﻿</span></span>
+									be a sequence of <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>n</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">n</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.43056em;vertical-align:0em;"></span><span
+															class="mord mathdefault">n</span></span></span></span></span><span>﻿</span></span>
+									tokens <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mi>x</mi>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mi>x</mi>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mi>x</mi>
+																	<mi>n</mi>
+																</msub>
+																<mo>&gt;</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;x_{1}, x_{2}, ... x_{n}&gt;
+															</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord mathdefault">x</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.151392em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">n</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">&gt;</span></span></span></span></span><span>﻿</span></span>. Let
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>S</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">S</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.68333em;vertical-align:0em;"></span><span
+															class="mord mathdefault"
+															style="margin-right:0.05764em;">S</span></span></span></span></span><span>﻿</span></span>
+									be the state of the world, which consists of <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mi>i</mi>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">∀</mi>
+																<mi>i</mi>
+																<mo>∈</mo>
+																<mo stretchy="false">[</mo>
+																<mn>1</mn>
+																<mo separator="true">,</mo>
+																<mn>7</mn>
+																<mo stretchy="false">]</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{i}, \forall i \in [1, 7]
+															</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut"
+															style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">∀</span><span class="mord mathdefault">i</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">∈</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:1em;vertical-align:-0.25em;"></span><span
+															class="mopen">[</span><span class="mord">1</span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">7</span><span
+															class="mclose">]</span></span></span></span></span><span>﻿</span></span>, where
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									is the state of baker i . For each <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>,
+									let <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>c</mi>
+																	<mi>j</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">c_{j}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span
+															class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.311664em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight"
+																							style="margin-right:0.05724em;">j</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									represents the number of content of one of the six colored chemical, we denote <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									as <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mi>c</mi>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mi>c</mi>
+																	<mn>2</mn>
+																</msub>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mi>c</mi>
+																	<mn>7</mn>
+																</msub>
+																<mo>&gt;</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;c_{1}, c_{2} ... c_{7}&gt;
+															</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord mathdefault">c</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">7</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">&gt;</span></span></span></span></span><span>﻿</span></span> ,
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mn>0</mn>
+																<mo>≤</mo>
+																<msub>
+																	<mi>c</mi>
+																	<mi>j</mi>
+																</msub>
+																<mo>≤</mo>
+																<mn>4</mn>
+															</mrow>
+															<annotation encoding="application/x-tex">0 \leq c_{j} \leq 4</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.78041em;vertical-align:-0.13597em;"></span><span
+															class="mord">0</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">≤</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.922078em;vertical-align:-0.286108em;"></span><span
+															class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.311664em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight"
+																							style="margin-right:0.05724em;">j</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.286108em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">≤</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.64444em;vertical-align:0em;"></span><span
+															class="mord">4</span></span></span></span></span><span>﻿</span></span>.</p>
+								<p id="b09d2473-e300-420c-a5fb-dd9cde06faf2" class="">Let <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>Y</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">Y </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.68333em;vertical-align:0em;"></span><span
+															class="mord mathdefault"
+															style="margin-right:0.22222em;">Y</span></span></span></span></span><span>﻿</span></span>be
+									all possible actions and <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mover accent="true">
+																	<mi>y</mi>
+																	<mo>ˉ</mo>
+																</mover>
+															</mrow>
+															<annotation encoding="application/x-tex">\bar{y} </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut"
+															style="height:0.7622199999999999em;vertical-align:-0.19444em;"></span><span
+															class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																		class="vlist" style="height:0.56778em;"><span
+																			style="top:-3em;"><span class="pstrut"
+																				style="height:3em;"></span><span class="mord"><span
+																					class="mord mathdefault"
+																					style="margin-right:0.03588em;">y</span></span></span><span
+																			style="top:-3em;"><span class="pstrut"
+																				style="height:3em;"></span><span class="accent-body"
+																				style="left:-0.19444em;"><span
+																					class="mord">ˉ</span></span></span></span><span
+																		class="vlist-s">​</span></span><span class="vlist-r"><span
+																		class="vlist"
+																		style="height:0.19444em;"><span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									be a sequence of <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>m</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">m </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.43056em;vertical-align:0em;"></span><span
+															class="mord mathdefault">m</span></span></span></span></span><span>﻿</span></span>
+									actions <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mi>y</mi>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mi>y</mi>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mi>y</mi>
+																	<mi>m</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;y_{1}, y_{2}, ... y_{m}
+															</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.625em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord mathdefault" style="margin-right:0.03588em;">y</span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.151392em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">m</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>&gt;.
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>y</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">y_{i} </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									can be one of of two types:</p>
+								<ul id="7898b16e-3bc2-41f3-ad00-f102922cb8d4" class="bulleted-list">
+									<li>POP( beaker i) </li>
+								</ul>
+								<ul id="30d717a6-a11f-45fa-918c-4da62cdb9dbf" class="bulleted-list">
+									<li>PUSH(beaker i, <style>
+											@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+										</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+											style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+													class="katex"><span class="katex-mathml"><math
+															xmlns="http://www.w3.org/1998/Math/MathML">
+															<semantics>
+																<mrow>
+																	<msub>
+																		<mi>c</mi>
+																		<mi>j</mi>
+																	</msub>
+																</mrow>
+																<annotation encoding="application/x-tex">c_{j}</annotation>
+															</semantics>
+														</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+																class="strut"
+																style="height:0.716668em;vertical-align:-0.286108em;"></span><span
+																class="mord"><span class="mord mathdefault">c</span><span
+																	class="msupsub"><span class="vlist-t vlist-t2"><span
+																			class="vlist-r"><span class="vlist"
+																				style="height:0.311664em;"><span
+																					style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																						class="pstrut" style="height:2.7em;"></span><span
+																						class="sizing reset-size6 size3 mtight"><span
+																							class="mord mtight"><span
+																								class="mord mathdefault mtight"
+																								style="margin-right:0.05724em;">j</span></span></span></span></span><span
+																				class="vlist-s">​</span></span><span class="vlist-r"><span
+																				class="vlist"
+																				style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>)
+									</li>
+								</ul>
+								<p id="564e1dc7-f120-4a09-9482-b9ff6b5a427c" class="">Let <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>I</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">I</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.68333em;vertical-align:0em;"></span><span
+															class="mord mathdefault"
+															style="margin-right:0.07847em;">I</span></span></span></span></span><span>﻿</span></span>
+									be an interaction, which contains an initial state of the world <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>S</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">S_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.05764em;">S</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>,
+									a sequence of five <em>instructions </em>
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>5</mn>
+																</msub>
+																<mo>&gt;</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;\bar{x}_{1}, \bar{x}_{2}, ...
+																\bar{x}_{5}&gt;</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.7622199999999999em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord accent"><span class="vlist-t"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord accent"><span class="vlist-t"><span class="vlist-r"><span
+																			class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord accent"><span class="vlist-t"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">5</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">&gt;</span></span></span></span></span><span>﻿</span></span>. Our
+									goal is to output the corresponding <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>y</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>y</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mover accent="true">
+																		<mi>y</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>5</mn>
+																</msub>
+																<mo>&gt;</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;\bar{y}_{1},
+																\bar{y}_{2},...\bar{y}_{5}&gt;</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.7622199999999999em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault"
+																						style="margin-right:0.03588em;">y</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.19444em;"><span
+																						class="mord">ˉ</span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.19444em;"><span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord accent"><span class="vlist-t vlist-t2"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault"
+																						style="margin-right:0.03588em;">y</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.19444em;"><span
+																						class="mord">ˉ</span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.19444em;"><span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault"
+																						style="margin-right:0.03588em;">y</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.19444em;"><span
+																						class="mord">ˉ</span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.19444em;"><span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">5</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">&gt;</span></span></span></span></span><span>﻿</span></span> and
+									hence predict the correct world state.
+								</p>
+								<p id="4807fc5f-6b98-415d-99b9-e44502d3a331" class="">
+								</p>
+								<figure id="40ba24b3-7c44-4302-8221-c423781ab43f" class="image"><a
+										href="fig/alchemy.png"><img
+											style="width:428px"
+											src="fig/alchemy.png" /></a>
+								</figure>
+								<h2 id="138aa9e4-4ef8-448f-bf5b-f72b5e682402" class=".blog-entry .desc h3">Data</h2>
+								<p id="d4fb8636-3d5c-421e-b637-c9db4a5d01b9" class="">The data is divided into training, development and
+									testing slices, each containing interactions in the ALCHEMY environment. Here we compare overall
+									statistics of the three slices, including the number of interactions, the size of the corpus of the
+									three slices, number of actions per instruction and average number of words per instruction. </p>
+								<p id="0c097375-339b-41ed-be9e-a8c638443c9a" class="">
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mtable rowspacing="0.15999999999999992em"
+																columnalign="center center center center center"
+																columnlines="solid solid solid solid" columnspacing="1em"
+																rowlines="none solid none none solid none none solid none">
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Data</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext># interactions</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext># Corpus</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>avg # actions per instruction</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>avg # words per instruction</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Training</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>3657</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>696</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>2.23</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>8.1</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Development</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>245</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>140</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>2.3</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>6.3</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Testing</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>899</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>341</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>2.23</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>7.81</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+															</mtable>
+															<annotation encoding="application/x-tex">\begin{array}{c|c|c|c|c}\text{Data}
+																&amp;
+																\text{\# interactions}&amp;
+																\text{\# Corpus}&amp;
+																\text{avg \# actions per instruction}&amp;
+																\text{avg \# words per instruction} \\ \\ \hline \\
+																\text{Training} &amp; \text{3657}&amp; \text{696}&amp; \text{2.23}&amp;
+																\text{8.1}\\ \\ \hline \\
+																\text{Development} &amp; \text{245}&amp; \text{140}&amp; \text{2.3}&amp;
+																\text{6.3}\\ \\ \hline \\
+																\text{Testing} &amp; \text{899}&amp; \text{341}&amp; \text{2.23}&amp;
+																\text{7.81}\\
+																\end {array}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:12em;vertical-align:-5.75em;"></span><span
+															class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																		class="vlist" style="height:6.25em;"><span
+																			style="top:-8.25em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="mtable"><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Data</span></span></span></span><span
+																									style="top:-7.209999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-6.009999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Training</span></span></span></span><span
+																									style="top:-3.609999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-2.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Development</span></span></span></span><span
+																									style="top:-0.009999999999998621em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:1.1900000000000006em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Testing</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord"># interactions</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">3657</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">245</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">899</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord"># Corpus</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">696</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">140</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">341</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">avg # actions per instruction</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">2.23</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">2.3</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">2.23</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">avg # words per instruction</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">8.1</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">6.3</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">7.81</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep"
+																					style="width:0.5em;"></span></span></span><span
+																			style="top:-4.899999999999999em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span><span
+																			style="top:-8.499999999999996em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span><span
+																			style="top:-12.099999999999998em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span></span><span
+																		class="vlist-s">​</span></span><span class="vlist-r"><span
+																		class="vlist"
+																		style="height:5.75em;"><span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+								</p>
+								<p id="6902ba9f-96ef-4438-91ae-32536b942605" class="">
+								</p>
+								<p id="6ac0698d-119d-48f8-8111-78fbc31837df" class="">We also check the ratio of PUSH and POP actions in the
+									data. Note that there is a disproportion between PUSH and POP actions in the training dataset and
+									testing dataset. The development dataset has a slightly more balanced (but still disproportionate)
+									distribution between the two action types.</p>
+								<p id="49f5f11b-47be-41a9-bcf3-75cacb448be9" class="">
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mtable rowspacing="0.15999999999999992em"
+																columnalign="center center center center" columnlines="solid solid solid"
+																columnspacing="1em"
+																rowlines="none solid none none solid none none solid none">
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Data</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext># POP action(percentage)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext># PUSH action(percentage)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext># actions</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Training</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>32760(80%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>8119(20%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>40879</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Development</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>1746(61%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>1102(39%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>2848</mtext>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+																<mtr>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>Testing</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>8006(80%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>2038(20%)</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mtext>10044</mtext>
+																		</mstyle>
+																	</mtd>
+																	<mtd>
+																		<mstyle scriptlevel="0" displaystyle="false">
+																			<mrow></mrow>
+																		</mstyle>
+																	</mtd>
+																</mtr>
+															</mtable>
+															<annotation encoding="application/x-tex">\begin{array}{c|c|c|c}\text{Data} &amp;
+																\text{\# POP action(percentage)}&amp;
+																\text{\# PUSH action(percentage)}&amp;
+																\text{\# actions}\\ \\ \hline \\
+																\text{Training} &amp; \text{32760(80\%)}&amp; \text{8119(20\%)}&amp;
+																\text{40879}\\ \\ \hline \\
+																\text{Development} &amp; \text{1746(61\%)}&amp; \text{1102(39\%)}&amp;
+																\text{2848}\\ \\ \hline \\
+																\text{Testing} &amp; \text{8006(80\%)}&amp; \text{2038(20\%)}&amp;
+																\text{10044}&amp;\\
+																\end {array}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:12em;vertical-align:-5.75em;"></span><span
+															class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																		class="vlist" style="height:6.25em;"><span
+																			style="top:-8.25em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="mtable"><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Data</span></span></span></span><span
+																									style="top:-7.209999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-6.009999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Training</span></span></span></span><span
+																									style="top:-3.609999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-2.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Development</span></span></span></span><span
+																									style="top:-0.009999999999998621em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:1.1900000000000006em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">Testing</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord"># POP action(percentage)</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">32760(80%)</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">1746(61%)</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">8006(80%)</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord"># PUSH action(percentage)</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">8119(20%)</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">1102(39%)</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">2038(20%)</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="vertical-separator"
+																					style="height:11.999999999999998em;border-right-width:0.04em;border-right-style:solid;margin:0 -0.02em;vertical-align:-5.749999999999999em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:6.249999999999999em;"><span
+																									style="top:-8.409999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord"># actions</span></span></span></span><span
+																									style="top:-4.809999999999999em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">40879</span></span></span></span><span
+																									style="top:-1.209999999999998em;"><span
+																										class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">2848</span></span></span></span><span
+																									style="top:2.39em;"><span class="pstrut"
+																										style="height:3em;"></span><span
+																										class="mord"><span
+																											class="mord text"><span
+																												class="mord">10044</span></span></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="arraycolsep" style="width:0.5em;"></span><span
+																					class="col-align-c"><span class="vlist-t vlist-t2"><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:-4.55em;"><span
+																									style="top:2.5500000000000003em;"><span
+																										class="pstrut"
+																										style="height:2.84em;"></span><span
+																										class="mord"></span></span></span><span
+																								class="vlist-s">​</span></span><span
+																							class="vlist-r"><span class="vlist"
+																								style="height:5.75em;"><span></span></span></span></span></span><span
+																					class="arraycolsep"
+																					style="width:0.5em;"></span></span></span><span
+																			style="top:-4.899999999999999em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span><span
+																			style="top:-8.499999999999996em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span><span
+																			style="top:-12.099999999999998em;"><span class="pstrut"
+																				style="height:8.25em;"></span><span class="hline"
+																				style="border-bottom-width:0.04em;"></span></span></span><span
+																		class="vlist-s">​</span></span><span class="vlist-r"><span
+																		class="vlist"
+																		style="height:5.75em;"><span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+								</p>
+								<h2 id="253ae28c-7267-4574-beac-9e58d5a29ef9" class=".blog-entry .desc h3">Model</h2>
+								<p id="5c5b37f7-26d9-4f8b-b1ac-e4068a283eb7" class="">The model is a sequence to sequence model consisting
+									of two encoders and one decoder. For all the sequences (instruction, states, actions), paddings and an
+									end of sentence token are added accordingly.</p>
+								<p id="4f91ed4b-014f-4c1e-8feb-3a5a92c1cf18" class=""><strong>Instruction encoder</strong></p>
+								<p id="36c4ead2-bb89-4bf3-8a7b-5f2dca136d90" class="">The instruction encoder encodes the instructions up to
+									the current one in the interactions. Suppose the current instruction is the <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mi>i</mi>
+															</mrow>
+															<annotation encoding="application/x-tex">i </annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.65952em;vertical-align:0em;"></span><span
+															class="mord mathdefault">i</span></span></span></span></span><span>﻿</span></span>th
+									<em>instruction</em> in the <em>interaction, </em>we encode <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<mo>&lt;</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mi>i</mi>
+																</msub>
+																<mo>&gt;</mo>
+															</mrow>
+															<annotation encoding="application/x-tex">&lt;\bar{x}_{1}, \bar{x}_{2}, ...
+																\bar{x}_{i}&gt;</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span
+															class="mrel">&lt;</span><span class="mspace"
+															style="margin-right:0.2777777777777778em;"></span></span><span
+														class="base"><span class="strut"
+															style="height:0.7622199999999999em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord accent"><span class="vlist-t"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord accent"><span class="vlist-t"><span class="vlist-r"><span
+																			class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">2</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span
+															class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span
+															class="mord"><span class="mord accent"><span class="vlist-t"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span><span
+															class="mspace" style="margin-right:0.2777777777777778em;"></span><span
+															class="mrel">&gt;</span></span></span></span></span><span>﻿</span></span> and
+									separate each <em>instruction </em>with a special token <strong><em>SEP_PREV</em></strong><em>, </em>and
+									separate <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mrow>
+																		<mi>i</mi>
+																		<mo>−</mo>
+																		<mn>1</mn>
+																	</mrow>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mover accent="true">
+																		<mi>x</mi>
+																		<mo>ˉ</mo>
+																	</mover>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">\bar{x}_{i-1}, \bar{x}_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.776111em;vertical-align:-0.208331em;"></span><span
+															class="mord"><span class="mord accent"><span class="vlist-t"><span
+																		class="vlist-r"><span class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.311664em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span><span
+																							class="mbin mtight">−</span><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.208331em;"><span></span></span></span></span></span></span><span
+															class="mpunct">,</span><span class="mspace"
+															style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																class="mord accent"><span class="vlist-t"><span class="vlist-r"><span
+																			class="vlist" style="height:0.56778em;"><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="mord"><span
+																						class="mord mathdefault">x</span></span></span><span
+																				style="top:-3em;"><span class="pstrut"
+																					style="height:3em;"></span><span class="accent-body"
+																					style="left:-0.22222em;"><span
+																						class="mord">ˉ</span></span></span></span></span></span></span><span
+																class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span
+																			class="vlist" style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									with <strong><em>SEP_CURR</em></strong><em>. </em>Each token is passed to an embedding layer with
+									dimension size of <strong>100</strong> and then passed to a <strong>1 layer bi-directional </strong>LSTM
+									with hidden size of <strong>100</strong>.</p>
+								<p id="50282650-9d64-4aa1-bbbe-af8e6962bf85" class="">For example, an instruction will be first tokenized
+									and padded, and then transformed into an embedding.</p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="0223eb00-be58-4934-9d8f-fe6181f6e5ea"
+									class="code code-wrap"><code>['pour', 'out', 'left', 'most', 'yellow', 'chemical', 'SEP_PREV', 'pour', 'yellow', 'chemical', 'into', 'left', 'most', 'orange', 'chemical', 'SEP_PREV', 'pour', 'out', 'one', 'unit', 'of', 'purple', 'chemical', 'SEP_CURR', 'mix', 'beaker', 'of', 'yellow', 'and', 'orange', 'chemicals', 'so', 'that', 'they', 'form', 'a', 'brown', 'chemical', '_EOS', '_PAD', ...,'_PAD']</code></pre>
+								<p id="0ef62cfc-e670-42d6-a2a3-d26dc42bdddf" class="">
+								</p>
+								<p id="ed4f25a8-cba8-46fe-92d3-b569b9733b71" class=""><strong>State encoder</strong></p>
+								<p id="97173bfe-0c20-4e93-8337-5689c9f728f6" class="">The state encoder encodes the world states <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>S</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">S_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.05764em;">S</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									in the form of <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mn>1</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<msub>
+																	<mi>s</mi>
+																	<mn>2</mn>
+																</msub>
+																<mo separator="true">,</mo>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<mi mathvariant="normal">.</mi>
+																<msub>
+																	<mi>s</mi>
+																	<mn>7</mn>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">{s_{1}, s_{2}, ...s_{7}}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord"><span class="mord mathdefault">s</span><span
+																	class="msupsub"><span class="vlist-t vlist-t2"><span
+																			class="vlist-r"><span class="vlist"
+																				style="height:0.30110799999999993em;"><span
+																					style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																						class="pstrut" style="height:2.7em;"></span><span
+																						class="sizing reset-size6 size3 mtight"><span
+																							class="mord mtight"><span
+																								class="mord mtight">1</span></span></span></span></span><span
+																				class="vlist-s">​</span></span><span class="vlist-r"><span
+																				class="vlist"
+																				style="height:0.15em;"><span></span></span></span></span></span></span><span
+																class="mpunct">,</span><span class="mspace"
+																style="margin-right:0.16666666666666666em;"></span><span class="mord"><span
+																	class="mord mathdefault">s</span><span class="msupsub"><span
+																		class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																				style="height:0.30110799999999993em;"><span
+																					style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																						class="pstrut" style="height:2.7em;"></span><span
+																						class="sizing reset-size6 size3 mtight"><span
+																							class="mord mtight"><span
+																								class="mord mtight">2</span></span></span></span></span><span
+																				class="vlist-s">​</span></span><span class="vlist-r"><span
+																				class="vlist"
+																				style="height:0.15em;"><span></span></span></span></span></span></span><span
+																class="mpunct">,</span><span class="mspace"
+																style="margin-right:0.16666666666666666em;"></span><span
+																class="mord">.</span><span class="mord">.</span><span
+																class="mord">.</span><span class="mord"><span
+																	class="mord mathdefault">s</span><span class="msupsub"><span
+																		class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																				style="height:0.30110799999999993em;"><span
+																					style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																						class="pstrut" style="height:2.7em;"></span><span
+																						class="sizing reset-size6 size3 mtight"><span
+																							class="mord mtight"><span
+																								class="mord mtight">7</span></span></span></span></span><span
+																				class="vlist-s">​</span></span><span class="vlist-r"><span
+																				class="vlist"
+																				style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>.
+									Each <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mi>j</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{j}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.311664em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight"
+																							style="margin-right:0.05724em;">j</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									is passed to an embedding layer with dimension size of<strong> 100</strong> and then passed to a
+									<strong>1 layer LSTM</strong> with hidden size of <strong>100</strong>. We encode both the initial world
+									state <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>S</mi>
+																	<mn>0</mn>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">S_{0}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.05764em;">S</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">0</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>
+									and the current world state <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>S</mi>
+																	<mi>k</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">S_{k}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.05764em;">S</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.33610799999999996em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight"
+																							style="margin-right:0.03148em;">k</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>.
+								</p>
+								<p id="ad934ff6-5ad5-4c77-b423-2037c415b282" class="">For example, <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>s</mi>
+																	<mn>1</mn>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">s_{1}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span
+															class="mord"><span class="mord mathdefault">s</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.30110799999999993em;"><span
+																				style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight">1</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>will
+									be first tokenized and padded, then transformed into an embedding.</p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="56ec7bcb-8495-422c-a605-42740ceb6e6d"
+									class="code"><code>['2',':','o','y', '_EOS', '_PAD', ..., '_PAD']</code></pre>
+								<p id="3bd4ef85-3e2e-4f79-b0e4-c7dd4882f346" class=""><strong>Action decoder</strong></p>
+								<p id="f6084768-8bda-4806-b94e-fd05d8b7a974" class="">For the decoder, the input sequence is the action word
+									of the corresponding actions. For example, the action &#x27;push 1 b&#x27; will be tokenized into
+									[&#x27;push&#x27;, &#x27;1&#x27;, b&#x27;]. To maintain the structure of the output action, one
+									&#x27;_NONE&#x27; token is added to each POP action, and two &#x27;_NONE&#x27; tokens are added to the
+									&#x27;_EOS&#x27; token. For example:</p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="b2f044f8-6cc2-4320-a905-7dde327ac202"
+				class="code code-wrap"><code>Actions: ['pop 6', 'pop 6', 'push 7 p', 'push 7 p']
+Action words: ['pop', '6', '_NONE', 'pop', '6', '_NONE', 'push', '7', 'p', 'push', '7', 'p', '_EOS', '_NONE', '_NONE', '_PAD', '_PAD', '_PAD', '_PAD', '_PAD', '_PAD', '_PAD']</code></pre>
+								<p id="a74f2df0-c457-4d27-af95-23beeb64a964" class="">A <strong>&lt;SOS&gt; </strong>token is used as the
+									initial input. we use the last hidden state and cell state from the instruction encoder as the initial
+									hidden state. We use the hidden state to attend on hidden states of each step of the encoder outputs;
+									the encoded current world state (hidden state) and the encoded initial world state (hidden state) for
+									the interaction. (Note: world state is not updated during the action decoding for a single instruction).
+									All attention layers are <em>bilinear attention. </em>We concat all the attended output and use a fully
+									connected layer with tanh activation to project the concatenated output to the dimension of the hidden
+									states. We then past the hidden state and the input to the decoder. The decoder model is a <strong>20
+										layer LSTM</strong> with a hidden size of <strong>100</strong>. The decoder LSTM has a drop out rate
+									of 0.2.</p>
+								<h2 id="73bea0d3-9cc0-4154-b10b-7225029f9012" class=".blog-entry .desc h3">Training</h2>
+								<p id="15846358-50c7-4617-b03f-5b057e30371b" class="">The model is optimized with negative log likelihood
+									loss using the Adam optimizer with an initial learning rate of 0.001. A learning rate scheduler is used
+									to reduce learning rate when validation loss stops improving. When decoding the sequence,
+									<strong>teacher forcing is used with a ratio of 1</strong> (i.e. we input the ground truth action
+									<style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msubsup>
+																	<mi>y</mi>
+																	<mrow>
+																		<mi>i</mi>
+																		<mo>−</mo>
+																		<mn>1</mn>
+																	</mrow>
+																	<msup>
+																		<mrow></mrow>
+																		<mo mathvariant="normal" lspace="0em" rspace="0em">′</mo>
+																	</msup>
+																</msubsup>
+															</mrow>
+															<annotation encoding="application/x-tex">y_{i-1}^{&#x27;}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut"
+															style="height:1.2594750000000001em;vertical-align:-0.316995em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.94248em;"><span
+																				style="top:-2.441336em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span><span
+																							class="mbin mtight">−</span><span
+																							class="mord mtight">1</span></span></span></span><span
+																				style="top:-3.063em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mtight"><span></span><span
+																								class="msupsub"><span class="vlist-t"><span
+																										class="vlist-r"><span class="vlist"
+																											style="height:0.8278285714285715em;"><span
+																												style="top:-2.931em;margin-right:0.07142857142857144em;"><span
+																													class="pstrut"
+																													style="height:2.5em;"></span><span
+																													class="sizing reset-size3 size1 mtight"><span
+																														class="mord mtight"><span
+																															class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.316995em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>when
+									decoding <style>
+										@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css')
+									</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token"
+										style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span
+												class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML">
+														<semantics>
+															<mrow>
+																<msub>
+																	<mi>y</mi>
+																	<mi>i</mi>
+																</msub>
+															</mrow>
+															<annotation encoding="application/x-tex">y_{i}</annotation>
+														</semantics>
+													</math></span><span class="katex-html" aria-hidden="true"><span class="base"><span
+															class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span
+															class="mord"><span class="mord mathdefault"
+																style="margin-right:0.03588em;">y</span><span class="msupsub"><span
+																	class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist"
+																			style="height:0.31166399999999994em;"><span
+																				style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span
+																					class="pstrut" style="height:2.7em;"></span><span
+																					class="sizing reset-size6 size3 mtight"><span
+																						class="mord mtight"><span
+																							class="mord mathdefault mtight">i</span></span></span></span></span><span
+																			class="vlist-s">​</span></span><span class="vlist-r"><span
+																			class="vlist"
+																			style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>).
+									The model is trained for 100 epochs and we use the model with the minimum validation loss as the final
+									model. The model is trained for 100 epoches using a batch size of 16.</p>
+								<p id="39150c2a-a97a-4d4a-9889-dbc97114e289" class=""><strong>Inference Procedure</strong></p>
+								<p id="31aca416-9b32-4214-983c-7df3721ba650" class="">The task is evaluated using two metrics:
+									single-sentence task completion and interaction task completion. Hence there are two inference
+									procedures to produce the corresponding results. For each given instruction, we use the instruction
+									encoder to encode instructions and state encoder to encode current world state and initial world states.
+									We then evaluate the accuracy by the final world state of the instruction. For each given interaction,
+									we encode the instruction and world state in a similar fashion. However, the initial world state of the
+									intermediate instruction is output by the previous instruction prediction. We evaluate the final world
+									state of the interaction.</p>
+								<p id="1dc6f2ef-ec63-46f1-b427-7d3bdc65a220" class=""><strong>Unknown word handling</strong></p>
+								<p id="969c08de-3fbc-402f-9ae8-2f431dbeb577" class="">For unknown word in the instruction, we encode them
+									into a single token <em><strong>UNK. </strong></em>For state encoding, since it is composed of colors
+									and beaker id, there are no issue with unknown word.</p>
+								<h2 id="b6cfea45-05b9-4c9d-801e-4ef3a7743d1a" class=".blog-entry .desc h3">Results </h2>
+								<p id="6ac5c32e-c9a6-4e54-a514-0f9c5be1d2d6" class="">The model achieves an instruction level accuracy of
+									74% and an interaction level accuracy of 27%. </p>
+								<h3 id="f491a8bd-b46f-429a-b01a-7eb581f344d8" class="">Quantitative analysis </h3>
+								<p id="f13c3214-a075-4a56-9e7a-c3c5f3961ba7" class=""><strong>Instruction level accuracy</strong></p>
+								<p id="3f2a036c-8a6b-47d5-b3cc-033f05c64c02" class="">First we want to understand how the model is predicted
+									for instructions at different positions in the interaction. We can see that the error rate of the first
+									instruction is significantly lower than the later ones in the interaction, suggesting that the model is
+									weak in dealing with long sequences. Another reason is that the latter instructions are more context
+									dependent. For instance, for the below instruction of the fourth instruction in the interaction, the
+									model will need to resolve the reference for &quot;this chemical&quot;, which refers to the &quot;first
+									remaining purple chemical&quot; in the previous instruction. Moreover, it will need to correctly
+									identify the current state of the beaker to know how many colored chemical to POP.</p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="766e52af-8252-4cff-9f71-b238b9a7ccac"
+									class="code code-wrap"><code>Instruction: 'throw out the last green chemical SEP_PREV same for the red chemical SEP_PREV same for the first purple chemical SEP_PREV same for two units of the first remaining purple chemical SEP_CURR throw out the rest of this chemical'</code></pre>
+								<p id="e3d3a6a1-0390-4159-8e92-f02615267d69" class="">
+								</p>
+								<figure id="885b8210-a192-4da7-a4d6-91796df08dfc" class="image"><a
+										href="fig/analysis-1.png"><img
+											style="width:514px"
+											src="fig/analysis-1.png" /></a>
+								</figure>
+								<p id="221254bc-c9fa-41c7-b17b-678100dce070" class="">
+								</p>
+								<p id="95563f89-dab3-4512-b969-715a4ad51564" class="">We can also see that the error rate is higher for
+									instructions that are mapped to longer action sequences, as well as instruction with more words.</p>
+								<figure id="a3a944ac-d518-42f7-90d3-c22c849eea1b" class="image"><a
+										href="fig/analysis-3.png"><img
+											style="width:401px"
+											src="fig/analysis-3.png" /></a>
+								</figure>
+								<figure id="62fe97f9-41bf-4a96-a864-c56c935e2265" class="image"><a
+										href="fig/analysis-4.png"><img
+											style="width:391px"
+											src="fig/analysis-4.png" /></a>
+								</figure>
+								<p id="d149fb01-cf50-480a-8c27-4554398525cf" class=""><strong>Action legality </strong></p>
+								<p id="6d7bf2aa-c9d7-4e01-8693-79c1718a2b95" class="">We also checked whether the predicted actions are
+									semantically legal, e.g. for a PUSH action, there must be one following token produced for the beaker,
+									followed one token for the colored chemical. (note: this is different from whether the predicted action
+									is valid for the world state). </p>
+								<p id="5fb2c28e-8f9a-45cc-b6aa-9783ed652832" class="">Out of all predicted actions, 15% are illegal actions,
+									among which 52% are pop actions and the remaining are push actions.</p>
+								<h3 id="6991a8e8-9ea2-4dda-b990-eb5a2c1e1f2c" class="">Qualitative analysis</h3>
+								<p id="169ccea7-efe1-42f3-b2ee-e8bc3b18cd38" class=""><strong>Confusing POP and PUSH</strong></p>
+								<p id="1c365e64-efaf-412a-bd48-610fdb9c084b" class="">Some of the incorrect predictions come from the model
+									confusing pop and push action. For example, in the below instruction prediction, the model correctly
+									identifies the green beaker(5) and red beaker(6). However, it confuses the pop action with the push
+									action, and hence outputting an illegal push action. </p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+			<pre id="3ef8d140-b718-4544-a2ab-1ddc5446c3b1" class="code code-wrap"><code>predicted actions:  ['push', '5', '_NONE', 'push', '6', 'g', '_EOS', '_NONE', '_NONE', 'pop', '6', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_NONE', '_NONE', '_NONE', '_NONE']
+action:  ['pop', '5', '_NONE', 'push', '6', 'g']
+instruction:  add the green beaker's chemical to the red beaker
+before_env:  1:yyy 2:_ 3:_ 4:_ 5:g 6:r 7:_</code></pre>
+								<p id="1cb5fca5-9eec-4c4a-999c-082134e65a45" class="">
+								</p>
+								<p id="46b25a87-9b8e-4ccb-8e14-b44da48ee211" class=""><strong>Failing to resolve reference</strong></p>
+								<p id="54096b3c-6b71-4e83-ad40-b1230f39e2fe" class="">Some of the incorrect predictions come from the
+									failure to resolve the reference in the instruction. For instance, in the below example, the instruction
+									is to pour out the middle beaker with red, which refers to 2 out of the three beakers with red
+									chemicals. However, the model failed to resolve this reference, but instead predicted beaker 4, which is
+									the middle beaker out of 7 beakers, with red chemical. </p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="821919cd-787f-4c23-9fc9-751e784267c6" class="code code-wrap"><code>predicted_actions:  ['pop', '4', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', 'pop', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+action:  ['pop', '2', '_NONE']
+instruction:  pour out middle beaker with red chemical
+before_env:  1:r 2:r 3:gg 4:r 5:gg 6:yyyy 7:_</code></pre>
+								<p id="5a7a67d8-a099-4e03-9016-491c7257b337" class="">
+								</p>
+								<p id="c6230757-84b5-420e-b914-3bf66bc44418" class="">For the below prediction error on the fourth
+									instruction in the interaction, the model failed to resolve the reference &#x27;the beaker next to
+									<em><strong>it</strong></em>&#x27;, and seems to be still referring to the beaker two instructions
+									before. Note that there is also a chain of reference for the three instructions.</p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="837b19b0-1977-4a39-ab19-f960b8e48e6a" class="code code-wrap"><code>
+identifier: test-11646-2
+action: ['pop', '4', '_NONE', 'pop', '4', '_NONE', 'pop', '4', '_NONE', 'pop', '4', '_NONE']
+predicted_actions: ['pop', '4', '_NONE', 'pop', '4', '_NONE', 'pop', '4', '_NONE', 'pop', '4', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+instruction: completely discard the contents of the fourth beaker
+before_env: 1:_ 2:yyyy 3:ggg 4:gggg 5:r 6:g 7:_
+
+identifier: test-11646-3
+action: ['pop', '6', '_NONE']
+predicted_actions: ['pop', '6', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+instruction: do the same with the sixth beaker
+before_env: 1:_ 2:yyyy 3:ggg 4:_ 5:r 6:g 7:_
+
+identifier: test-11646-4
+predicted_actions:  ['pop', '3', '_NONE', 'pop', '3', '_NONE', 'pop', '3', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+action:  ['pop', '5', '_NONE']
+instruction:  repeat for the beaker next to it
+before_env: 1:_ 2:yyyy 3:ggg 4:_ 5:r 6:_ 7:_</code></pre>
+								<p id="4cc56ee2-9a0c-4d1c-ba7d-6a64f5adcd7c" class="">
+								</p>
+								<p id="95f211df-c311-4569-8f67-9d6c16b97630" class=""><strong>Failing to identify the correct beaker
+										state</strong></p>
+								<p id="780edb70-68f6-478f-913e-75e6fe8c3ad4" class="">Some of the instructions are highly dependent on the
+									current beaker state. For instance, to correctly predict the actions needed for the instruction
+									&#x27;empty the sixth beaker&#x27;, the model will need to know that currently there are four colored
+									chemical to pop. Similarly, for the second example, the model failed to recognize the chemical in the
+									seventh beaker and hence gave the wrong prediction. </p>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="a8f80bec-9c0b-4f97-9da8-93e8a265a713" class="code code-wrap"><code>identifier: test-10044-3
+predicted_actions:  ['pop', '6', '_NONE', 'pop', '6', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+action:  ['pop', '6', '_NONE', 'pop', '6', '_NONE', 'pop', '6', '_NONE', 'pop', '6', '_NONE']
+instruction:  empty the sixth beaker
+before_env:  1:pppp 2:bbb 3:_ 4:oo 5:pp 6:yyyy 7:ooo</code></pre>
+								<style>
+									@import url('https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css')
+								</style>
+								<pre id="b3704651-fe63-46cb-8d45-e1b1caa4e475" class="code code-wrap"><code>identifier: test-11577-2
+predicted_actions:  ['pop', '3', '_NONE', 'push', '7', 'g', '_EOS', '_NONE', '_NONE', 'pop', '7', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS', '_NONE', '_NONE', '_EOS']
+action:  ['pop', '3', '_NONE', 'push', '7', 'o']
+instruction: pour the third beaker into the seventh beaker
+before_env:  1:_ 2:_ 3:o 4:_ 5:_ 6:oooo 7:oo</code></pre>
+								<h2 id="80253868-ac52-4a50-87c6-477b11aaea9b" class=".blog-entry .desc h3">Discussion</h2>
+								<h3 id="5051e520-df78-438b-b5f1-db4a56aa8903" class="">Resolving references to state and previous
+									instructions</h3>
+								<p id="8121cea0-d015-4a21-a4a0-692709a8232c" class="">As mentioned in the <a href="">section</a> above, one
+									of the difficulty for the model is to resolve references in the instruction, especially multi-hop
+									references (e.g. when the second instruction is dependent on the first one, and the third one is
+									dependent on the second). Another difficulty is to correctly identify the state of the current beaker.
+									Potential improvements can be done in both the encoders and decoders. Specifically, currently the
+									decoder is doing all the heavy lifting whereas encoder only gets the whole instruction. One direction is
+									to leverage more complicated model architecture (such as <a
+										href="https://arxiv.org/pdf/1706.03762.pdf">Transformer</a>) to better encode those information in
+									the encoder. </p>
+								<h3 id="57defbbc-a5e5-45ca-bebe-f6f1fc150343" class="">Debiasing POP and PUSH action</h3>
+								<p id="98bbb477-8ac4-4131-a75c-9c3fc95ab348" class="">As discussed in the <a href="">data</a> section, the
+									training and testing data is highly biased toward POP action. Even though we didn&#x27;t perform a
+									quantitative analysis on the error rate of PUSH and POP action (given that the actions in one
+									instruction is orderless), this might bias the model towards always outputting POP, as discussed in this
+									<a href="https://arxiv.org/pdf/1805.10209.pdf">paper</a>. A learning algorithm is also proposed to
+									address this issue, which is also worth examining. </p>
 
 				<!--End of blog contents-->
 							</div>
