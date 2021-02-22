@@ -100,6 +100,8 @@
 			margin-left: 4.5rem;
 		}
 
+		
+
 	</style>
 	<!-- FOR IE9 below -->
 	<!--[if lt IE 9]>
@@ -2513,8 +2515,8 @@ action:  ['pop', '3', '_NONE', 'push', '7', 'o']
 instruction: pour the third beaker into the seventh beaker
 before_env:  1:_ 2:_ 3:o 4:_ 5:_ 6:oooo 7:oo</code></pre>
 								<h2 id="80253868-ac52-4a50-87c6-477b11aaea9b" class=".blog-entry .desc h3">Discussion</h2>
-								<h3 id="5051e520-df78-438b-b5f1-db4a56aa8903" class="">Resolving references to state and previous
-									instructions</h3>
+								<p id="5051e520-df78-438b-b5f1-db4a56aa8903" class=""><strong>Resolving references to state and previous
+									instructions</strong></p>
 								<p id="8121cea0-d015-4a21-a4a0-692709a8232c" class="">As mentioned in the <a href="">section</a> above, one
 									of the difficulty for the model is to resolve references in the instruction, especially multi-hop
 									references (e.g. when the second instruction is dependent on the first one, and the third one is
@@ -2524,13 +2526,13 @@ before_env:  1:_ 2:_ 3:o 4:_ 5:_ 6:oooo 7:oo</code></pre>
 									to leverage more complicated model architecture (such as <a
 										href="https://arxiv.org/pdf/1706.03762.pdf">Transformer</a>) to better encode those information in
 									the encoder. </p>
-								<h3 id="57defbbc-a5e5-45ca-bebe-f6f1fc150343" class="">Debiasing POP and PUSH action</h3>
+								<p id="57defbbc-a5e5-45ca-bebe-f6f1fc150343" class=""><strong>Debiasing POP and PUSH action</strong></p>
 								<p id="98bbb477-8ac4-4131-a75c-9c3fc95ab348" class="">As discussed in the <a href="">data</a> section, the
 									training and testing data is highly biased toward POP action. Even though we didn&#x27;t perform a
 									quantitative analysis on the error rate of PUSH and POP action (given that the actions in one
 									instruction is orderless), this might bias the model towards always outputting POP, as discussed in this
 									<a href="https://arxiv.org/pdf/1805.10209.pdf">paper</a>. A learning algorithm is also proposed to
-									address this issue, which is also worth examining. </p>
+									address this issue, which is also worth examining. Data augmentation is also a direction worth exploring to mitigate this issue.</p>
 
 				<!--End of blog contents-->
 							</div>
