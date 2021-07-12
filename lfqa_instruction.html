@@ -1,0 +1,343 @@
+<!-- You must include this JavaScript file -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(
+        function(){
+            if (document.getElementById('answer_sentence_1').innerHTML.length > 0){
+                document.getElementById('row_1').style.display='block';
+                // document.getElementById('row_1_no').style.width='80px';
+            }
+            if (document.getElementById('answer_sentence_2').innerHTML.length > 0){
+                document.getElementById('row_2').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_3').innerHTML.length > 0){
+                document.getElementById('row_3').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_4').innerHTML.length > 0){
+                document.getElementById('row_4').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_5').innerHTML.length > 0){
+                document.getElementById('row_5').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_6').innerHTML.length > 0){
+                document.getElementById('row_6').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_7').innerHTML.length > 0){
+                document.getElementById('row_7').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_8').innerHTML.length > 0){
+                document.getElementById('row_8').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_9').innerHTML.length > 0){
+                document.getElementById('row_9').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_10').innerHTML.length > 0){
+                document.getElementById('row_10').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_11').innerHTML.length > 0){
+                document.getElementById('row_11').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_12').innerHTML.length > 0){
+                document.getElementById('row_12').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_13').innerHTML.length > 0){
+                document.getElementById('row_13').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_14').innerHTML.length > 0){
+                document.getElementById('row_14').style.display='block';
+            }
+            if (document.getElementById('answer_sentence_15').innerHTML.length > 0){
+                document.getElementById('row_15').style.display='block';
+            }
+    });
+</script>
+
+<!-- For the full list of available Crowd HTML Elements and their input/output documentation,
+      please refer to https://docs.aws.amazon.com/sagemaker/latest/dg/sms-ui-template-reference.html -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="icon" href="../../../../favicon.ico">
+
+  <title>Understanding the structure of answer for complex queries</title>
+
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:15px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:15px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top;font-size:15px;}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top; font-size:15px;}
+    .tg .tg-0lax{text-align:left;vertical-align:top; font-size:15px;}
+    </style>
+
+</head>
+<body>
+<div class="container" id="instruction">
+    <div class="page-header">
+      <h2 class="text-muted">Instructions: Understanding the structure of answer for complex queries</h1>
+    </div>
+
+    <div>
+      <div>
+          <p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;">
+            <span style="font-size: 12pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Thank you for participating in this task! We would like to better understand what composes an answer to complex queries such as “Why do birds sing in the morning?”. You will be presented with a question, originally posted on <span id="docs-internal-guid-4ef5cb92-7fff-32ff-b976-853c0fd45972"><a href="https://www.reddit.com/r/explainlikeimfive/"><span style="font-size: 11pt; color: rgb(17, 85, 204); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; text-decoration-line: underline; text-decoration-skip-ink: none; vertical-align: baseline;">Reddit forum</span></a></span>, and an answer paragraph provided by another user. Your job is to provide a label for each sentence in the answer paragraph, deciding the role of this sentence in the paragraph.&nbsp;&nbsp;</span></p><span id="docs-internal-guid-366cb1f7-7fff-6cd8-390d-00e7489c6235"><br><p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;"></span></p>
+            <span style="font-size: 12pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">You have seven coarse categories of sentence roles (<span class="badge" style="background-color: gray;">Response to the question</span>, <span class="badge" style='background-color:green;'>High level description of the answer provided</span>, <span class="badge" style='background-color:orangered;'>Background/Auxiliary information</span>, <span class="badge" style='background-color:brown;'>Answer to the question</span>, <span class="badge" style='background-color:green;'>Providing an example</span>, <span class="badge" style='background-color:rebeccapurple;'>Elaboration of the answer</span>, <span class="badge" style='background-color:blue;'>Others</span>), which will be explained in detail below. </span></p><span id="docs-internal-guid-366cb1f7-7fff-6cd8-390d-00e7489c6235"><br><p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;"></span></p>
+            
+            <div class='panel panel-default'>
+            <div class='panel-body'>
+            <h3>Example</h3>
+            <span style='font-size: 12pt; font-family: Arial;'>Here’s an example annotation:</span><p></p><p dir="ltr" style="line-height:1.38;margin-top:0pt;margin-bottom:0pt;"><span id="docs-internal-guid-8732e554-7fff-1007-8d7e-d27664688a16">
+                <span style="font-size: 12pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Question: </span><span style="font-size: 12pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Why do birds chirp more in the morning?</span></span><br></p>
+<div>
+    <br>
+<table class="tg" style="table-layout: flexible;">
+<colgroup>
+    <col style="width: 30px">
+    <col style="width: 620px">
+    <col style="width: 300px">
+    </colgroup>
+<thead>
+    <tr style='border-color:black; background-color:#ffe4e1'>
+    <th class="tg-fymr"><span>No.</span></th>
+    <th class="tg-fymr"><span>Answer Sentence</span></th>
+    <th class="tg-fymr"><span>Role</span></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">1</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Birds will begin to chirp in the hours before dawn, this is known as the dawn chorus and can begin in earnest as early as 4 am (you might have a few keeners in your area).</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Response to the question</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">2</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">There are a couple of reasons why ornithologists think birds tend to sing most in the early hours...</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">High level description of the answer provided</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">3</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">* First, the first to chirp is beating out the competition and is less likely to be drowned out by the completion later in the morning.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Answer to the question</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">4</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">* Second, the air before dawn is usually still and thus much better at conducting sound.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Answer to the question</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">5</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">More recent studies have shown that early-morning songs don't travel farther, but can be much clearer than later-in-the-day songs.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Elaboration of the answer</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">6</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">A *'clear'* advantage for those early-birds.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Elaboration of the answer</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">7</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">* Third, there isn't much to do in the early morning but sing since light levels are likely to low to forage</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Answer to the question</span></td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class='panel panel-default'>
+    <div class='panel-body'>
+        <h3 style="">Role Definition</h3><span style="font-size: 12pt; font-family: Arial;">We define a set of roles as follow:</span>
+    <div>
+<br>
+<table class="tg" style="table-layout: flexible;">
+<colgroup>
+<col style="width: 100px">
+<col style="width: 200px">
+<col style="width: 650px">
+</colgroup>
+<thead>
+    <tr style='border-color:black; background-color:#ffe4e1;'>
+    <th class="tg-fymr">Definition</th>
+    <th class="tg-fymr">Explanation</th>
+    <th class="tg-fymr">Example</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:normal;text-decoration:none">Response to the question</span></td>
+    <td class="tg-0pky">The sentence either affirms or fixes assumptions in the question.</td>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:italic;text-decoration:none">Fix the assumption </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: What is the speed of darkness? Does it even have a speed?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: </span><span style="font-weight:700">Darkness is the absence of light, so it's not something that exists on it's own.</span>[...]<br><br><span style="font-weight:400;font-style:italic;text-decoration:none">Affirm the assumption </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why do birds chirp more in the morning?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: </span><span style="font-weight:700">Birds will begin to chirp in the hours before dawn, this is known as the dawn chorus and can begin in earnest as early as 4 am (you might have a few keeners in your area).</span></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky">High level description of the answer provided</td>
+    <td class="tg-0pky">This sentence provides high level information of the answers provided, including 1) limitation or specification of the answer 2) sources of the answer 3) organizational sentences.</td>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:italic;text-decoration:none">(1) Limitation or specification of the answer </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: How do movies become Oscar contenders?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span><span style="font-weight:700">The academy has some pretty extensive rules, but heres the short eli5 version 1</span>.[...]<br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(2)Sources of the answer</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why do birds chirp more in the morning?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span><span style="font-weight:700">This info comes from the breeder who sold me my lovebird, so I can't really provide a source.</span>[...]<br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(3) Organizational sentences </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why do candidates like O'Malley and Kasich stay in the race when polls consistently show them at around 2%?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span><span style="font-weight:700">There are a few reasons candidates with "no chance" to win keep running. </span>[...]</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:normal;text-decoration:none">Background / Auxiliary information</span></td>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:normal;text-decoration:none">The sentence provides background or auxiliary information that is relevant to the answer, yet whose </span><br><span style="font-weight:700;font-style:normal;text-decoration:none">removal has no impact on the completeness of the answer.</span></td>
+    <td class="tg-0pky"><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why is it better to use cloning software instead of just copying and pasting the entire drive?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: </span><span style="font-weight:700">When you install an operating system, it sets up what's called a master file table, which holds file permissions for your files (telling the computer who can access them) among other things, which are important for the OS to work properly. </span>[...]  Simply copy-pasting files doesn't copy either of these, meaning if you want to back up an OS installation you should clone the disk instead.</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Answer to the question</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">The sentence contains (part of) the answer to the question. <b>Please select the minimal set of sentences that alone can be the answer to the provided question.</b>
+        Sometimes just one key sentence would suffice, sometimes there are 2-3 or more.</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why do birds chirp more in the morning?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: [...]*</span><span style="font-weight:700">First, the first to chirp is beating out the competition and is less likely to be drowned out by the completion later in the morning.</span>[...]</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Providing a example</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">The sentence provides a more specific, detailed example (either a concrete one or hypothetical one, see examples ) to explain the answer.</td>
+        <td class="tg-0pky"><span style="font-weight:400;font-style:italic;text-decoration:none">(1) Hypothetical example </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Were major news outlets established with political bias or was it formed over time?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span>[...]<span style="font-weight:700">Consider a world where people on the right want the tax rate to be 1% lower and people on the left want the tax rate to be 1% higher.</span>.[...]<br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(2)Concrete example</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: What is it about electricity that kills you?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span>[...]<span style="font-weight:700">For example, static electricity consists of tens of thousands of volts, but basically no amps. </span>[...]</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Elaboration of the answer</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">The sentence provides elaboration to the answer, including (1) providing a more specific, detailed example (note that this could be a hypothetical example), (2) providing evidence which supports the answer (3) explaining the answer with analogy.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:italic;text-decoration:none">(1) Evidence</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why do birds chirp more in the morning?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: [...]* Second, the air before dawn is usually still and thus much better at conducting sound.</span><span style="font-weight:700">More recent studies have shown that early-morning songs don't travel farther, but can be much clearer than later-in-the-day songs.</span>[...]<br><span style="font-weight:700;font-style:normal;text-decoration:none"> </span><br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(2) Explain with analogy </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: When did male height become a feature of sexual nature and why?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A: [...]Females look for the best males to reproduce healthy children with, so masculinity and height play a big factor.</span><span style="font-weight:700">Just like how (most) males prefer women with larger hips because they are better for child-bearing. </span><span style="font-weight:normal">[...]</span><br></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Others</td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">This sentence contains other information, such as (1) responses to other answers or (2) provides pointers to additional resources that might contain the answer (3) express sentiments towards the question asked.</span></td>
+    <td class="tg-0lax"><span style="font-weight:400;font-style:italic;text-decoration:none">(1) Response to other answers</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why did Catholicism embrace celibacy and why did Protestantism reject it?</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span><span style="font-weight:700">Good God, the amount of misinformation upvoted is hurting. </span>[...]<br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(2) Pointer to other resources </span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: Why did Catholicism embrace celibacy and why did Protestantism reject it?</span><br><span style="font-style:normal;text-decoration:none">A</span><span style="font-weight:bold;font-style:normal;text-decoration:none">:</span><span style="font-weight:700;font-style:normal;text-decoration:none"> /r/askhistorians has a few excellent discussions about this. </span><span style="font-style:normal;text-decoration:none">[...]</span><br><br><span style="font-weight:400;font-style:italic;text-decoration:none">(3) Sentiment towards questions asked</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">Q: How the First Virus Originated on Earth</span><br><span style="font-weight:400;font-style:normal;text-decoration:none">A:</span><span style="font-weight:700;font-style:normal">This is gonna be a hard one.</span><span style="font-style:normal">[...]</span><br></td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class='panel panel-default'>
+    <div class='panel-body'>
+<h3>More examples:</h3><span style="font-size: 12pt; font-family: Arial;">Please refer to this doc for more examples:</span><span id="docs-internal-guid-254990d6-7fff-d0e4-2d2f-3a2d8a8049cb"><a href="https://docs.google.com/document/d/1D-QcilDlkkZxsEPi__Yr8NUHOzNUqlVLDlu9WCB2f2E/edit?usp=sharing" target="_blank"><span style="font-size: 12pt; font-family: Arial; color: rgb(17, 85, 204); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; text-decoration-line: underline; text-decoration-skip-ink: none; vertical-align: baseline; white-space: pre-wrap;">Long Form Question Answering Examples</span></a></span>
+</div>
+</div>
+
+<div class='panel panel-default'>
+    <div class='panel-body'>
+<h3>FAQ <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+  </svg> </h3>
+<div>
+  <span style="font-size: 12pt; font-family: Arial;"><b>Q: How can I distinguish between “Answer to the question” vs. “Background/Auxiliary Information” v.s. “Elaboration of the answer”?</b></span>
+  <p>
+  <div class='panel panel-default'>
+      <div class='panel-body'>
+        <span style="font-size: 12pt; font-family: Arial;"><b>A:</b></span>
+        <ul style="font-size: 12pt; font-family: Arial;">
+      <li><b>“Answer to the question”</b> are the minimal set of sentences that can serve as an answer alone to the question provided. In other words, the removal of any sentence labeled with this role will result in an incomplete answer.</li>
+      <li><b>“Background/Auxiliary Information”</b> provides information that might not be required to answer the question, but are either background information for some of the terms referred to in the answer or auxiliary information that are not asked but related to what is discussed in the answer. In the example below, sentence (1) - (4) talks about quantum mechnics that is related to “multi-verse” (Background information).</li>
+      <li><b>“Elaboration of the answer”</b>contains further elaboration or explanation of the answers. In the example below, sentence (6) further explains sentence(5) and hence fall into this category. </li>
+    </ul>
+    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Question: </span><span style="font-size: 12pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Please explain me how the string theory suggests the theoretical existence of the multiverse?</span></span><br></p>
+    <div>
+        <br>
+    <table class="tg" style="table-layout: flexible;">
+    <colgroup>
+        <col style="width: 30px">
+        <col style="width: 620px">
+        <col style="width: 300px">
+        </colgroup>
+    <thead>
+        <tr style='border-color:black; background-color:#ffe4e1;'>
+        <th class="tg-fymr"><span>No.</span></th>
+        <th class="tg-fymr"><span>Answer Sentence</span></th>
+        <th class="tg-fymr"><span>Role</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tg-0lax">1</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">It's not so much string theory as it's about interpretations of how quantum mechanics works.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Response to the question</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">2</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">In QM the world we see is fundamentally based upon chance; the waveform determines the chance the particle can be found at that state, but once we've measured the position the whole waveform 'collapses' and the particle 'is' in that specific state.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Background / Auxiliary information</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">3</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">This places an observer in a weird spot where observing what happens fundamentally changes the outcome.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Background / Auxiliary information</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">4</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">This goes against our intuition and also slightly against what scientists would want, we'd like to be neutral observers an not interfere with our experiments.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Background / Auxiliary information</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">5</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">The multi-verse comes in here and basically says: the observer is not anything special, everything happens, the particle is in every possible state, but in different universes.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Answer to the question</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">6</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Which will mean that measuring simply tells you in 'what universe' you are in.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Elaboration of the answer</span></td>
+      </tr>
+      <tr>
+        <td class="tg-0lax">7</td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Right now, however, there is no way to prove or disprove this theory, and I don't think anyone came up with even a theoretical way to test this.</span></td>
+        <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">High level information of the answer</span></td>
+      </tr>
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </div>
+
+    <div>
+        <span style="font-size: 12pt; font-family: Arial;"><b>Q: What if a sentence serves two or more roles?</b></span>
+        <p>
+        <div class='panel panel-default'>
+            <div class='panel-body'>
+                <span style="font-size: 12pt; font-family: Arial;"><b>A:</b></span>
+        <span style="font-size: 12pt; font-family: Arial;">It is possible that one sentence serves more than one role. If that is the case, please select the most appropriate one for the sentence. For example:</span>
+         
+         <span style="font-size: 12pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Question: </span><span style="font-size: 12pt; color: rgb(0, 0, 0); background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; vertical-align: baseline; white-space: pre-wrap;">Why is it better to use cloning software instead of just copying and pasting the entire drive?</span></span><br></p>
+         <table class="tg" style="table-layout: flexible;">
+            <colgroup>
+                <col style="width: 30px">
+                <col style="width: 620px">
+                <col style="width: 300px">
+                </colgroup>
+            <thead>
+                <tr style='border-color:black; background-color:#ffe4e1;'>
+                <th class="tg-fymr"><span>No.</span></th>
+                <th class="tg-fymr"><span>Answer Sentence</span></th>
+                <th class="tg-fymr"><span>Role</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tg-0lax">1</td>
+                <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">In addition to what others have said, clone software can utilize block by block copying which can be much faster than copying than doing it file by file.</span></td>
+                <td class="tg-0lax"><span style="font-weight:400;font-style:normal;text-decoration:none">Response to the question</span></td>
+              </tr>
+            </tbody>
+            </table>
+        <br>
+        <p style="font-size: 12pt; font-family: Arial;"><b>Explanation:</b> This sentence contains (1) response to other answers (“Others”): “in addition to what others have said” as well as (2) “Answer to the question”: “clone software can utilize block by block copying which can be much faster than copying than doing it file by file.”  However since the second part is the main focus of the sentence, it should be labeled as the role “Answer to the question”.</p>
+        </div>
+    </div>
+    </div>
+
+
+
+</div>
+</div>
+</div>
+
+
+</span></p></div>
+</div> 
+</body>
