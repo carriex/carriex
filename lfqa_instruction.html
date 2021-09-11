@@ -117,6 +117,7 @@
                 <div id='step1_instruction'>
                     <h3>Step 1: Validity Check</h3>
                     <hr/>
+                    <div>
                         <div>
                             <span style="font-size: 12pt; font-family: Arial;">
                                 In the first step, you will determine if this is a valid (question, answer) pair. We define below reasons for which a (question, answer) pair should be considered invalid for this task:</span>
@@ -137,80 +138,149 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="tg-0lax" style='font-weight: bold;'>Bad answers</td>
+                                                <td class="tg-0lax" style='font-weight: bold;'>No valid answer</td>
                                                 <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;text-decoration:none">The answer paragraph doesn't provide a valid answer to the question. Note that this includes answer paragraph that only provides partial answer to the question.</span></td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>What is data or information in its simplest definition?</span>
-                                                    <br>
+                                                        style="font-weight:400;font-style:normal;text-decoration:none">The answer paragraph doesn't provide a valid answer to the question.
+                                                        <br>
+                                                        <span class="text-danger">Please note that if the answer can be inferred from the paragraph, it should be a valid answer (see second example).</span>
+                                                            </span></td>
+                                                <td class="tg-0lax"><span><i>(1) Example of no valid answer</i></span><br><span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>Why can’t we tickle ourselves?</span>
                                                     <br>
                                                     <span
-                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>/u/YMK1234 answered your fundamental question pretty well, so I am going to skip the part about information and merely address the part where you say > How light would not be light if there were no dark.
-                                                        That is really not true.Dark is not a physical property, it is only the absence of light.And light can be detected by photo-detectors..[...]</span>
-                                                    <br>
+                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>I can. Am I a mutant? Is this my power?</span>
                                                     <br>
                                                         <span
-                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The question is about data while the answer talks about about light and dark.</span>
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> There is no valid answer about the question asked. 
+                                                    </span>
+                                                    <br>
+                                                    <br>
+                                                    <span class="text-danger">
+                                                        <span><i>(2) Counterexample: Implicit answer</i></span><br><span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>what is the difference between the qx56 and qx80</span>
+                                                    <br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>The Infiniti QX80 ( called the Infiniti QX56 until 2014 ) is a full - size luxury SUV built by Nissan Motor Company Infiniti division .
+                                                        The naming convention originally adhered to the current trend of using a numeric designation derived from the engine 's displacement , thus QX56 since the car has a 5.6 - liter engine .
+                                                        From the 2014 model year , the car was renamed the QX80 , as part of Infiniti 's model name rebranding .The new name carries no meaning beyond suggesting that the vehicle is larger than smaller models such as the QX60 .</span>
+                                                    <br>
+                                                        <span
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b>The answer could be inferred from the first sentence (QX80 is a new name of QX56).</span>
+                                                    </span>
                                                     </td>
                                             </tr>
                                             <tr>
-                                                <td class="tg-0lax" style='font-weight: bold'>Confusing questions</td>
+                                                <td class="tg-0lax" style='font-weight: bold'>Nonsensical question</td>
                                                 <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;text-decoration:none">The question is confusing or under-specified and hence it is unclear what is asked.</span></td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>why was it called the great american desert</span>
-                                                    <br>
+                                                        style="font-weight:400;font-style:normal;text-decoration:none">The question is nonsensical and it is unclear what is asked.
+                                                        <br>
+                                                        <span class="text-danger">Please note that some queries don't contain any question word, and yet it is clear what they are 
+                                                            asking about (see second example) and hence they shouldn't fall under this category.
+                                                        </span>
+                                                    </span></td>
+                                                <td class="tg-0lax">
+                                                    <span><i>(1) Nonsensical question</i></span><br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>i'm glad i'm not a kennedy</span>
                                                     <br>
                                                     <span
-                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The question is confusing and doesn't specify what is "it". </span>
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b>This is not a question.</span>
+                                                    <br>
+                                                    <br>
+                                                    <span class="text-danger">
+                                                        <span><i>(2) Counterexample: Short queries</i></span><br><span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>difference between senate and house of commons canada</span>
+                                                    <br>
+                                                        <span
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b>This query doesn't contain any question word, but it if clear that it is asking 
+                                                    about "What is the difference between senate and house of commons in Canada".</span>
+                                                    </span>
+            
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="tg-0lax" style='font-weight: bold'>Subjective questions</td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;text-decoration:none">The question asks about something subjective.</span></td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>What's the best way to tell if you love someone or in love with someone?</span>
-                                                    <br>
-                                                    <br>
-                                                        <span
-                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The question is asking about a subjective opinion. </span>
-                                                    </td>
                                             </tr>
                                             <tr>
                                                 <td class="tg-0lax" style='font-weight: bold'>Multiple questions asked</td>
                                                 <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;text-decoration:none">More than one questions are asked in the answer question.</span></td>
-                                                <td class="tg-0lax"><span
+                                                        style="font-weight:400;font-style:normal;text-decoration:none">More than one questions are asked in the answer question. <br>
+                                                        <span class="text-danger">Please note that sometimes the question can be complicated and 
+                                                    yet <b>only one question is asked</b> (See second example) and hence they shouldn't fall under this category.</span></span></td>
+                                                <td class="tg-0lax">
+                                                    <span><i>(1) Multiple questions asked</i></span><br><span
                                                         style="font-weight:400;font-style:normal;"><b>Question:</b>How light pollution works, and would the stars appear straight away if we turned the lights off on the entire globe?</span>
-                                                    <br>
                                                     <br>
                                                         <span
                                                         style="font-weight:400;font-style:normal;"><b>Explanation:</b> Two questions are asked in this sentence. We exclude such questions since it will be difficult to select the main content.</span>
-                                                    </td>
+                                                    <br>
+                                                    <br>
+                                                    <span class="text-danger">
+                                                    <span><i>(2) Counterexample: One complicated question</i></span><br><span
+                                                    style="font-weight:400;font-style:normal;"><b>Question:</b>Is the presence of pain evidence that damage is done, or is it just a warning?</span>
+                                                <br>
+                                                    <span
+                                                    style="font-weight:400;font-style:normal;"><b>Explanation:</b>This is <i>one</i> disjunctive question, asking whether the presence of pain is an evidence that damage is done or a warning.</span>
+                                                </span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="tg-0lax" style='font-weight: bold'>Assumptions in the question rejected</td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;text-decoration:none">The answer rejects the assumptions made in the question.</span></td>
-                                                <td class="tg-0lax"><span
-                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>How come restaurant graders let the restaurant know when they are coming? Doesn't that defeat the purpose?</span>
-                                                    <br>
+                                                <td class="tg-0lax">
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;text-decoration:none">The answer focuses on rejecting assumptions in the question, without answering the question.<br>
+                                                    <span class="text-danger">
+                                                    We would like to point out two counter examples <br>
+                                                    (1)If it is a question asking about difference between
+                                                     two or more entities, an answer suggesting that there is no difference should be considered as a <b>valid QA</b>, 
+                                                     instead of "Assumptions in the question rejected" (see second example).<br>
+                                                    (2)If the answer <i>corrects</i> some assumption from the question, but still provides answer of what is asked (see third example).</span></span></td>
+                                                <td class="tg-0lax">
+                                                    <span><i>(1) Assumption rejected:</i></span><br><span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>Why can't I share a puddle of water with my dog? I get sick every time but he's fine.</span>
                                                     <br>
                                                     <span
-                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>Health department officials show up whenever they feel they should. 
-                                                        sometimes if a restaurant is due for an inspection they might be able to guess when the most likely time the inspector will be there, but there is no advanced warning.[...]</span>
-                                                    <br>
+                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>dirty water' is pretty vague. There are lots of different diseases and contamits that water can have. A singular adaptation is not likely to make you 'dirty water' proof. Your dog himself is not dirty water proof. 
+                                                        He can potentially get sickened or parasitized by contaminated water as well.</span>
                                                     <br>
                                                         <span
-                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The assumption in the question "restaurant graders let the restaurant know when they are coming"
-                                                    is rejected by the answer.</span>
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The answer argues that dogs can also be sickened by contaminated water which rejects the assumption
+                                                    in the question "I get sick every time but he's fine".</span>
+                                                    <br>
+                                                    <br>
+                                                    <span class="text-danger">
+                                                    <span><i>(2) Counterexample: question about difference </i></span><br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>what's the difference between 9mm luger and parabellum</span>
+                                                    <br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>The 9 × 19mm Parabellum is a firearms cartridge that was designed by Georg Luger [...]
+                                                        it is designated as the 9mm Luger by the SAAMI , and the 9 mm Luger by the C.I.P. .</span>
+                                                    <br>
+                                                        <span
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The answer suggests that there is no difference between 9mm luger and parabellum. In this case,
+                                                    we treat this as a <b>valid</b> QA pair.</span>
+                                                    </span>
+                                                    <br>
+                                                    <br>
+                                                <span class="text-danger">
+                                                    <span><i>(3) Counterexample: Partial rejection </i></span><br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Question:</b>How can the chlorine in tap water kill microorganisms, but not the cells in our bodies?</span>
+                                                    <br>
+                                                    <span
+                                                        style="font-weight:400;font-style:normal;"><b>Answer:</b>It will kill cells in the body at high enough concentrations. Scientist and experts do their best to use as little as possible to get the job done and use "just enough" to get rid of the bacteria. Also, chlorine evaporates and degrades fairly quickly. 
+                                                        So from the time the water is intitially treated to the time it eventually gets to your taps a lot of the chlorine is gone.</span>
+                                                    <br>
+                                                        <span
+                                                        style="font-weight:400;font-style:normal;"><b>Explanation:</b> The answer corrects the assumption that chlorine can kill cells in the body
+                                                    if the concentration is high. However, it also explains why the <b>chlorine in tap water</b> doesn't, which is the answer to the question.</span>
+                                                    </span>
+                                                </span>
                                                     </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 </div>
+                    </div>
                     </div>
                 <!-- </div> -->
             <!-- </div> -->
